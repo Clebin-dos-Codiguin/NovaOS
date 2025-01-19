@@ -16,6 +16,9 @@
 [GLOBAL       exe]
 [GLOBAL       non]
 
+[GLOBAL starsSize]
+[GLOBAL     stars]
+
 section .text
         global  _start
 
