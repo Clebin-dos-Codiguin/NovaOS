@@ -13,7 +13,9 @@ extern BYTE info[];
 extern BYTE question[];
 extern BYTE user[];
 extern BYTE terminal[];
+extern BYTE non[];
 extern BYTE txt[];
+extern BYTE exe[];
 extern BYTE dir[];
 
 void DrawWindow(WINDOW window, int nextWindow)
@@ -109,6 +111,12 @@ void DrawDesktopIcon(EXTICON exticon, char* filename, int x, int y)
             break;
         case ICON_DIR:
             iconBitmap = dir;
+            break;
+        case ICON_EXE:
+            iconBitmap = exe;
+            break;
+        case ICON_DEFAULT:
+            iconBitmap = non;
             break;
         default:
             return;
