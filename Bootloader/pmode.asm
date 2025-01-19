@@ -4,6 +4,7 @@ pmode:
         mov     ax, DATASEG
 
         ;Setup Data Again
+        ;(Now with GDT)
         mov     ds, ax
         mov     es, ax
         mov     fs, ax
