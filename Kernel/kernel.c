@@ -14,6 +14,9 @@
 #include "../Userspace/GUI/gui.h"
 #include "../Userspace/userspace.h"
 
+extern char stars[];
+extern DWORD starsSize;
+
 void main(void)
 {
     Debug("VESA 640x480 8BPP Started!\n", 0x00);
@@ -24,6 +27,7 @@ void main(void)
     Debug("IDT Loaded!\n", 0x00);
 
     InitFileSystem();
+    CreateFile("stars.exe", stars, starsSize);
     Debug("MemFS File System Loaded!\n", 0x00);
 
     InitTimer();
