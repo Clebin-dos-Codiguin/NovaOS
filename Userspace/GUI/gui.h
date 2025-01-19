@@ -12,7 +12,9 @@ typedef enum
 typedef enum
 {
     ICON_TEXT,
-    ICON_DIR
+    ICON_DIR,
+    ICON_EXE,
+    ICON_DEFAULT
 } EXTICON;
 
 typedef struct
