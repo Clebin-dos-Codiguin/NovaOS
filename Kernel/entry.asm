@@ -42,3 +42,9 @@ section .data
         dir:      incbin "Include/Icons/dir.vad"
         exe:      incbin "Include/Icons/exe.vad"
         non:      incbin "Include/Icons/default.vad"
+
+        ;Programs
+        starsBase: equ $ - stars
+        stars:     incbin "Programs/Binaries/starfield.o"
+        stars_end: 
+        starsSize: dd stars_end - stars
