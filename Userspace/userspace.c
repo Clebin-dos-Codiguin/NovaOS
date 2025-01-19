@@ -245,12 +245,44 @@ void DesktopIcons()
         }
     }
 
-    //Show TXTs
     for (int i = 0; i < MAXFILES; i++)
     {
         if (fs->root.files[i].filename[0] != '\0')
         {
-            DrawDesktopIcon(ICON_TEXT, fs->root.files[i].filename, 10, 10 + (index * 76));
+            const char* filename = fs->root.files[i].filename;
+            const char* extension = NULL;
+
+            for (const char* p = filename; *p != '\0'; p++) 
+            {
+                if (*p == '.') 
+                {
+                    extension = p + 1;
+                }
+            }
+
+            EXTICON icon;
+
+            if (extension != NULL) 
+            {
+                if (strcmp(extension, "txt") == 0) 
+                {
+                    icon = ICON_TEXT;
+                } 
+                else if (strcmp(extension, "exe") == 0) 
+                {
+                    icon = ICON_EXE;
+                } 
+                else 
+                {
+                    icon = ICON_DEFAULT;
+                }
+            } 
+            else 
+            {
+                icon = ICON_DEFAULT;
+            }
+
+            DrawDesktopIcon(icon, fs->root.files[i].filename, 10, 10 + (index * 76));
             index++;
         }
     }
