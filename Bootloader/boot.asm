@@ -40,12 +40,12 @@ ReadSectors:
         mov     si, DAP
         int     0x13
 
-        add dword [DAP + 8], 127
-        add word  [DAP + 6], 0xFE0
+        add     dword [DAP + 8], 127
+        add     word  [DAP + 6], 0xFE0
 
-        pop cx
+        pop     cx
 
-        loop .loop
+        loop    .loop
 
         ret
 
