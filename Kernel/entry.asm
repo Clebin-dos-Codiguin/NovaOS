@@ -12,6 +12,8 @@
 
 [GLOBAL       txt]
 [GLOBAL       dir]
+[GLOBAL       exe]
+[GLOBAL       non]
 
 section .text
         global  _start
@@ -34,3 +36,5 @@ section .data
 
         txt:      incbin "Include/Icons/txt.vad"
         dir:      incbin "Include/Icons/dir.vad"
+        exe:      incbin "Include/Icons/exe.vad"
+        non:      incbin "Include/Icons/default.vad"
