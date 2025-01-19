@@ -26,9 +26,11 @@ i686-elf-gcc -ffreestanding -m32 -g -c Hardware/cmos.c       -o Binaries/cmos.o
 i686-elf-gcc -ffreestanding -m32 -g -c FileSystem/memfs.c    -o Binaries/memfs.o
 i686-elf-gcc -ffreestanding -m32 -g -c Shell/shell.c         -o Binaries/shell.o
 
-i686-elf-gcc -ffreestanding -m32 -g -c Userspace/userspace.c        -o Binaries/userspace.o
-i686-elf-gcc -ffreestanding -m32 -g -c Userspace/GUI/gui.c          -o Binaries/gui.o
-i686-elf-gcc -ffreestanding -m32 -g -c Userspace/run.c              -o Binaries/run.o
+i686-elf-gcc -ffreestanding -m32 -g -c Userspace/userspace.c -o Binaries/userspace.o
+i686-elf-gcc -ffreestanding -m32 -g -c Userspace/GUI/gui.c   -o Binaries/gui.o
+i686-elf-gcc -ffreestanding -m32 -g -c Userspace/run.c       -o Binaries/run.o
+
+i686-elf-gcc -ffreestanding -m32 -g -c Programs/starfield.c  -o Programs/Binaries/starfield.o
 
 echo "Linking ELF Files"
 i686-elf-ld -o Binaries/fullkernel.bin -Ttext 0x7E00 Binaries/entry.o Binaries/kernel.o Binaries/graphics.o Binaries/ports.o Binaries/text.o Binaries/mem.o Binaries/alloc.o Binaries/asmidt.o Binaries/idt.o Binaries/timer.o Binaries/keyboard.o Binaries/cpu.o Binaries/pci.o Binaries/disk.o Binaries/cmos.o Binaries/mouse.o Binaries/qemu.o Binaries/memfs.o Binaries/shell.o Binaries/gui.o Binaries/userspace.o Binaries/run.o --oformat binary
