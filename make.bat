@@ -11,6 +11,7 @@ echo "Compiling C Files"
 i686-elf-gcc -ffreestanding -m32 -g -c Kernel/kernel.c       -o Binaries/kernel.o
 i686-elf-gcc -ffreestanding -m32 -g -c Graphics/graphics.c   -o Binaries/graphics.o
 i686-elf-gcc -ffreestanding -m32 -g -c Include/ports.c       -o Binaries/ports.o
+i686-elf-gcc -ffreestanding -m32 -g -c Include/math.c        -o Binaries/math.o
 i686-elf-gcc -ffreestanding -m32 -g -c Font/text.c           -o Binaries/text.o
 i686-elf-gcc -ffreestanding -m32 -g -c Memory/mem.c          -o Binaries/mem.o
 i686-elf-gcc -ffreestanding -m32 -g -c Memory/alloc.c        -o Binaries/alloc.o
@@ -33,7 +34,7 @@ i686-elf-gcc -ffreestanding -m32 -g -c Userspace/run.c       -o Binaries/run.o
 i686-elf-gcc -ffreestanding -m32 -g -c Programs/starfield.c  -o Programs/Binaries/starfield.o
 
 echo "Linking ELF Files"
-i686-elf-ld -o Binaries/fullkernel.bin -Ttext 0x7E00 Binaries/entry.o Binaries/kernel.o Binaries/graphics.o Binaries/ports.o Binaries/text.o Binaries/mem.o Binaries/alloc.o Binaries/asmidt.o Binaries/idt.o Binaries/timer.o Binaries/keyboard.o Binaries/cpu.o Binaries/pci.o Binaries/disk.o Binaries/cmos.o Binaries/mouse.o Binaries/qemu.o Binaries/memfs.o Binaries/shell.o Binaries/gui.o Binaries/userspace.o Binaries/run.o --oformat binary
+i686-elf-ld -o Binaries/fullkernel.bin -Ttext 0x7E00 Binaries/entry.o Binaries/kernel.o Binaries/graphics.o Binaries/ports.o Binaries/math.o Binaries/text.o Binaries/mem.o Binaries/alloc.o Binaries/asmidt.o Binaries/idt.o Binaries/timer.o Binaries/keyboard.o Binaries/cpu.o Binaries/pci.o Binaries/disk.o Binaries/cmos.o Binaries/mouse.o Binaries/qemu.o Binaries/memfs.o Binaries/shell.o Binaries/gui.o Binaries/userspace.o Binaries/run.o --oformat binary
 
 echo "Mounting IMG"
 cat Binaries/boot.bin Binaries/fullkernel.bin > "NovaOS.img"
