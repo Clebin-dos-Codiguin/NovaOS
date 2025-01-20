@@ -206,7 +206,7 @@ void ProcessShellCMD(char* command)
     }
     else if (strcmp(cmd, "run") == 0x00)
     {
-        ProccessShellRun(args[0]);
+        ProcessShellRun(args[0]);
     }
     else
     {
