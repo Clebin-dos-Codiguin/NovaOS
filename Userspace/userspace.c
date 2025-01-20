@@ -6,11 +6,13 @@
 #include "../Memory/mem.h"
 #include "../Font/text.h"
 #include "../FileSystem/memfs.h"
+#include "../Timer/timer.h
 #include "GUI/gui.h"
 
 #include "run.h"
 #include "userspace.h"
 
+extern BYTE bootsrc[];
 extern BYTE backgrd[];
 
 WINDOW startMenu = { "", 0x12, 0, HSCREEN - 285, 150, 250, 1, TRUE, 0, 0, 0 };
@@ -287,6 +289,26 @@ void DesktopIcons()
         }
     }
 }
+
+void DrawBootScr(void)
+{
+    for (int y = 0; y < 128; y++)
+    {
+        for (int x = 0; x < 128; x++)
+        {
+            //Calculate Center
+            int fx = WSCREEN / 2 - 64;
+            int fy = HSCREEN / 2 - 96;
+
+            //Draw Bitmap
+            SetPixel(x + fx, y + fy, bootscr[y * 128 + (x + 8)]);
+        }
+    }
+
+    DrawLoadBar();
+    ClearScreen();
+}
+
 void UserSpace()
 {
     while (!inUserSpace)
