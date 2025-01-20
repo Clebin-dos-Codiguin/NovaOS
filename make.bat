@@ -4,7 +4,6 @@ cls
 
 echo "Compiling ASM Files"
 nasm -fbin Bootloader/boot.asm   -o Binaries/boot.bin
-nasm -felf Kernel/entry.asm      -o Binaries/entry.o
 nasm -felf Interrupts/idt.asm    -o Binaries/asmidt.o 
 
 echo "Compiling C Files"
@@ -33,8 +32,14 @@ i686-elf-gcc -ffreestanding -m32 -g -c Userspace/run.c       -o Binaries/run.o
 
 i686-elf-gcc -ffreestanding -m32 -g -c Programs/starfield.c  -o Programs/Binaries/starfield.o
 
+echo "Linking Programs"
+i686-elf-ld -m elf_i386 Binaries/graphics.o Binaries/math.o Programs/Binaries/starfield.o -o Programs/Binaries/stars.elf
+
+echo "Making Kernel Entry"
+nasm -felf Kernel/entry.asm -o Binaries/entry.o
+
 echo "Linking ELF Files"
-i686-elf-ld -o Binaries/fullkernel.bin -Ttext 0x7E00 Binaries/entry.o Binaries/kernel.o Binaries/graphics.o Binaries/ports.o Binaries/math.o Binaries/text.o Binaries/mem.o Binaries/alloc.o Binaries/asmidt.o Binaries/idt.o Binaries/timer.o Binaries/keyboard.o Binaries/cpu.o Binaries/pci.o Binaries/disk.o Binaries/cmos.o Binaries/mouse.o Binaries/qemu.o Binaries/memfs.o Binaries/shell.o Binaries/gui.o Binaries/userspace.o Binaries/run.o --oformat binary
+i686-elf-ld -o Binaries/fullkernel.bin -Ttext 0x7E00 Binaries/entry.o Binaries/kernel.o Binaries/graphics.o Binaries/ports.o Programs/Binaries/starfield.o Binaries/math.o Binaries/text.o Binaries/mem.o Binaries/alloc.o Binaries/asmidt.o Binaries/idt.o Binaries/timer.o Binaries/keyboard.o Binaries/cpu.o Binaries/pci.o Binaries/disk.o Binaries/cmos.o Binaries/mouse.o Binaries/qemu.o Binaries/memfs.o Binaries/shell.o Binaries/gui.o Binaries/userspace.o Binaries/run.o --oformat binary
 
 echo "Mounting IMG"
 cat Binaries/boot.bin Binaries/fullkernel.bin > "NovaOS.img"
