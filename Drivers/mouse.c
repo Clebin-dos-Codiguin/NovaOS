@@ -11,10 +11,12 @@
 
 extern WINDOW* window;
 
+//Drawing Buffers
 BYTE MouseArea[WCURSOR * HCURSOR];
 BYTE MouseCursorAfter[WCURSOR * HCURSOR];
 BYTE MousePrevious[WCURSOR * HCURSOR];
 
+//Mouse States
 BYTE mouseData;
 BYTE mouseCycle;
 BYTE mousePacket[4];
@@ -27,6 +29,7 @@ int prevMouseY = 0;
 int mouseX = 0;
 int mouseY = 0;
 
+//Returns cursor X, Y and if its pressed
 void GetMouseState(int* x, int* y, int* pressed) 
 {
     *x = mouseX;
@@ -34,6 +37,7 @@ void GetMouseState(int* x, int* y, int* pressed)
     *pressed = mousePressed;
 }
 
+//Draw the cursor
 void DrawMouse(BYTE color)
 {
     for (int y = 0; y < HCURSOR; y++)
@@ -44,8 +48,11 @@ void DrawMouse(BYTE color)
         {
             BYTE byte = cursor[y * 2 + i];
 
+            //Draw bit by bit
             for (int j = 7; j >= 0; j--)
             {
+                //if bit = 0, continue
+                //if bit = 1, set pixel
                 if (byte & (1 << j))
                 {
                     SetPixel(mouseX + x, mouseY + y, color);
@@ -56,6 +63,7 @@ void DrawMouse(BYTE color)
     }
 }
 
+//Save behind the cursor
 void SaveMouseArea()
 {
     for (int y = 0; y < HCURSOR; y++)
@@ -69,17 +77,7 @@ void SaveMouseArea()
     }
 }
 
-void SavePreviousArea(int prevMouseX, int prevMouseY)
-{
-    for (int y = 0; y < HCURSOR; y++)
-    {
-        for (int x = 0; x < WCURSOR; x++)
-        {
-            MousePrevious[y * WCURSOR + x] = GetPixel(prevMouseX + x, prevMouseY + y);
-        }
-    }
-}
-
+//Draw behing the cursor
 void RestorePreviousCursor()
 {
     for (int y = 0; y < HCURSOR; y++)
@@ -91,11 +89,13 @@ void RestorePreviousCursor()
     }
 }
 
+//Waits for PS/2 to receive data
 void MouseWait()
 {
     while (inb(0x64) & 0x02);
 }
 
+//Clear cursor trails
 void ClearTrails(int prevMouseX, int prevMouseY)
 {
     for (int y = 0; y < HCURSOR; y++)
@@ -109,13 +109,16 @@ void ClearTrails(int prevMouseX, int prevMouseY)
 
 void MouseHandler()
 {
+   //Read PS/2
     mouseData = inb(0x60);
 
+    //Packets sync
     if (mouseCycle == 0 && !(mouseData & 0x08))
     {
         return;
     }
-    
+
+    //Building a packet
     mousePacket[mouseCycle++] = mouseData;
 
     if (mouseCycle == 3)
@@ -124,19 +127,20 @@ void MouseHandler()
 
         mousePressed = (mousePacket[0] & 0x1);
 
+        //Updates position
         int deltaX = (int)((char)mousePacket[1]);
         int deltaY = (int)((char)mousePacket[2]);
 
+        //Save the previous position
         int prevMouseX = mouseX;
         int prevMouseY = mouseY;
 
         mouseX += deltaX;
         mouseY -= deltaY;
 
+        //Make sure the cursor stays inside of the screen
         mouseX = (mouseX < 0) ? 0 : ((mouseX > WSCREEN - 16) ? WSCREEN - 16 : mouseX);
         mouseY = (mouseY < 0) ? 0 : ((mouseY > HSCREEN - 16) ? HSCREEN - 16 : mouseY);
-
-        //HandleWindowDragging(window, mouseX, mouseY, mousePressed);
 
         ClearTrails(prevMouseX, prevMouseY);
         SaveMouseArea();
@@ -147,21 +151,22 @@ void MouseHandler()
 
 void InitMouse()
 {
-    outb(0x64, 0xA7);
-    outb(0x64, 0xA8);
+    outb(0x64, 0xA7); //Disable auxilpiar PS/2 Device
+    outb(0x64, 0xA8); //Enable Mouse
 
     while (inb(0x64) & 1)
     {
         inb(0x60);
     }
 
+    //Setup Mouse IRQ
     IRQInstallHandler(12, &MouseHandler);
 
-    outb(0x64, 0x20);
-    BYTE status = (inb(0x60) | 2);
-    outb(0x64, 0x60);
+    outb(0x64, 0x20); //Request config byte
+    BYTE status = (inb(0x60) | 2); //Enable mouse interrupts
+    outb(0x64, 0x60); //Define byte config
     outb(0x60, status);
 
-    outb(0x64, 0xD4);
-    outb(0x60, 0xF4);
+    outb(0x64, 0xD4); //Sends command to PS/2 Device
+    outb(0x60, 0xF4); //Enable mouse data streaming
 }
