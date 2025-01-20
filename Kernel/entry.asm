@@ -48,6 +48,6 @@ section .data
 
         ;Programs
         starsBase: equ $ - stars
-        stars:     incbin "Programs/Binaries/starfield.o"
+        stars:     incbin "Programs/Binaries/stars.elf"
         stars_end: 
         starsSize: dd stars_end - stars
