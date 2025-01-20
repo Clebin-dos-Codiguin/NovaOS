@@ -11,6 +11,9 @@
 #include "../Font/text.h"
 #include "../Userspace/GUI/gui.h"
 #include "../Userspace/userspace.h"
+#include "../Include/math.h"
+#include "../ELF/elfloader.h"
+#include "../Programs/starfield.h"
 
 #include "shell.h"
 
@@ -201,6 +204,10 @@ void ProcessShellCMD(char* command)
     {
         ChangeDir(args[0]);
     }
+    else if (strcmp(cmd, "run") == 0x00)
+    {
+        ProccessRun(args[0])
+    }
     else
     {
         Print("\n\nInvalid Command!", 0x0C);
@@ -208,4 +215,12 @@ void ProcessShellCMD(char* command)
 
     Print("\n\n", 0x00);
     PrintCurrentDir();
+}
+
+void ProcessShellRun(char* proccess)
+{
+    if (strcmp(proccess, "stars.exe") == 0x00)
+    {
+        DrawStarfield();
+    }
 }
