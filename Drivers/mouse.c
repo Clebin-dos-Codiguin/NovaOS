@@ -162,9 +162,9 @@ void InitMouse()
     //Setup Mouse IRQ
     IRQInstallHandler(12, &MouseHandler);
 
-    outb(0x64, 0x20); //Request config byte
+    outb(0x64, 0x20);              //Request config byte
     BYTE status = (inb(0x60) | 2); //Enable mouse interrupts
-    outb(0x64, 0x60); //Define byte config
+    outb(0x64, 0x60);              //Define byte config
     outb(0x60, status);
 
     outb(0x64, 0xD4); //Sends command to PS/2 Device
