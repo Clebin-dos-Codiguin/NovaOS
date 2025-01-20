@@ -3,6 +3,8 @@
 
 #include "qemu.h"
 
+//These will only work if you're using QEMU
+
 void Shutdown()
 {
     outw(0x604, 0x2000);
