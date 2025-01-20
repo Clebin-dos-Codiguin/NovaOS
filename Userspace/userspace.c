@@ -6,7 +6,7 @@
 #include "../Memory/mem.h"
 #include "../Font/text.h"
 #include "../FileSystem/memfs.h"
-#include "../Timer/timer.h
+#include "../Timer/timer.h"
 #include "GUI/gui.h"
 
 #include "run.h"
