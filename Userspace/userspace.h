@@ -6,6 +6,7 @@ void DrawTaskbar();
 void UpdateExplorer();
 void UserspaceState(int state);
 void DesktopIcons();
+void DrawBootScr();
 
 void SaveStartArea();
 void RestoreStartArea();
