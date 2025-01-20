@@ -3,8 +3,6 @@
 
 #include "graphics.h"
 
-extern BYTE bootscr[];
-
 void SetPixel(int x, int y, BYTE color)
 {
     LPBYTE framebuffer = (LPBYTE) VIDMEM;
@@ -39,25 +37,6 @@ void DrawRect(int x, int y, int w, int h, BYTE color)
             SetPixel(j, i, color);
         }
     }
-}
-
-void DrawBootScr(void)
-{
-    for (int y = 0; y < 128; y++)
-    {
-        for (int x = 0; x < 128; x++)
-        {
-            //Calculate Center
-            int fx = WSCREEN / 2 - 64;
-            int fy = HSCREEN / 2 - 96;
-
-            //Draw Bitmap
-            SetPixel(x + fx, y + fy, bootscr[y * 128 + (x + 8)]);
-        }
-    }
-
-    DrawLoadBar();
-    ClearScreen();
 }
 
 void StretchBlt(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
