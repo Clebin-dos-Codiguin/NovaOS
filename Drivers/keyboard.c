@@ -11,6 +11,7 @@
 
 #include "keyboard.h"
 
+//Events Variables
 int allowInput = 1;
 int enableText = 0;
 int shift = 0;
@@ -18,9 +19,11 @@ int caps = 0;
 int winPressed = 0;
 int rPressed = 0;
 
+//Shell command buffer
 char commandBuffer[50];
 int commandLength = 0;
 
+//Lower Case Scancode
 const char* lowercase[] = {
     " ", " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
     "-", "=", "\b", " ", "q", "w", "e", "r", "t", "y", "u", "i",
@@ -29,6 +32,7 @@ const char* lowercase[] = {
     "b", "n", "m", ",", ".", "/", " ", "*", " ", " "
 };
 
+//Upper Case Scancode
 const char* uppercase[] = {
     " ", " ", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")",
     "_", "+", "\b", " ", "Q", "W", "E", "R", "T", "Y", "U", "I",
@@ -37,6 +41,10 @@ const char* uppercase[] = {
     "B", "N", "M", "<", ">", "?", " ", " ", " ", " "
 };
 
+//Set keyboard to write in screen
+//0 -> Don't write nothing
+//1 -> GUI
+//2 -> Shell (NO GUI)
 void KeyboardState(int state)
 {
     if (state == TRUE)
@@ -55,21 +63,26 @@ void KeyboardState(int state)
 
 void KeyboardHandler()
 {
+    //Capture Scancode
     uint8_t scan = inb(0x60);
-    uint8_t isPress = !(scan & 0x80); // Verifica se a tecla foi pressionada
+
+    //Extract the 7 bit
+    //0 - Key press event
+    //1 - Key release
+    uint8_t isPress = !(scan & 0x80);
     scan &= 0x7F; // Remove o bit de liberação
 
     if (allowInput)
     {
         switch (scan)
         {
-            // Shift
+            //Shift
             case 42:
             case 54:
                 shift = isPress;
                 break;
 
-            // Caps lock
+            //Caps lock
             case 58:
                 if (isPress)
                 {
@@ -77,34 +90,38 @@ void KeyboardHandler()
                 }
                 break;
 
-            case 0x1C: // Enter
+            //Enter
+            case 0x1C:
+                //Proccess commandfor Run
                 if (isPress && enableText != 2) 
                 {
                     commandBuffer[commandLength] = '\0';
                     ProcessRun(commandBuffer);
                     commandLength = 0;
                 }
+                //Proccess command for Shell (NO GUI)
                 if (isPress && enableText == 2)
                 {
                     commandBuffer[commandLength] = '\0';
                     ProcessShellCMD(commandBuffer);
                     commandLength = 0;
                 }
-
                 break;
 
-            // Tecla Win (código especial 0xE0 seguido de 0x5B ou 0x5C)
-            case 0x5B: // Win esquerda
-            case 0x5C: // Win direita
+            //Win
+            case 0x5B:
+            case 0x5C:
                 winPressed = isPress;
                 break;
 
-            // Tecla R
-            case 0x13: // Scancode para 'R'
+            //R
+            case 0x13:
                 rPressed = isPress;
 
+                //Enter the scancode in buffer
                 if (isPress && enableText && commandLength < 49) 
                 {
+                    //If Shift or Caps Lock is enabled, set uppercase
                     if (shift || caps) 
                     {
                         commandBuffer[commandLength] = uppercase[scan][0];
@@ -114,12 +131,14 @@ void KeyboardHandler()
                         commandBuffer[commandLength] = lowercase[scan][0];
                     }
 
+                    //Draw pressed char and increase the next char buffer
                     PrintOut(commandBuffer[commandLength], 0x0F);
                     commandLength++;
                 }
                 break;
 
             default:
+                //Do the same as in the other
                 if (isPress && enableText && commandLength < 49)
                 {
                     if (shift || caps)
@@ -138,7 +157,7 @@ void KeyboardHandler()
                 break;
         }
 
-        // Verifica se Win e R estão pressionados simultaneamente
+        //Check if WIN key is pressed, then it draws the Run window
         if (winPressed && enableText != 2)
         {
             int StartWindowXY = GetStartWindowXY();
@@ -163,6 +182,7 @@ void KeyboardHandler()
     }
 }
 
+//Setup Keyboard IRQ
 void InitKeyboard()
 {
     IRQInstallHandler(0x01, &KeyboardHandler);
