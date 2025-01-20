@@ -12,7 +12,7 @@
 #include "run.h"
 #include "userspace.h"
 
-extern BYTE bootsrc[];
+extern BYTE bootscr[];
 extern BYTE backgrd[];
 
 WINDOW startMenu = { "", 0x12, 0, HSCREEN - 285, 150, 250, 1, TRUE, 0, 0, 0 };
