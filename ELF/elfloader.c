@@ -6,6 +6,9 @@
 
 #include "elfloader.h"
 
+//This code has some issues, it doesn't jump to
+//Another address idk why. If someone could help I would appreciate!
+
 int LoadELF(void* elfData)
 {
     Print("\n", 0x00);
