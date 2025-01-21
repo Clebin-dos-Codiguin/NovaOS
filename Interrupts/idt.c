@@ -148,9 +148,32 @@ void ISRHandler(struct InterruptRegisters* regs)
 {
     if (regs->int_no < 32)
     {
-        Print("\n\n", 0x0F);
-        Print(exception_messages[regs->int_no], 0x0C);
-        Print("\nException! System Halted\n", 0x0C);
+        DeathScreen(exception_messages[regs->int_no]);
+
+        Print("\nEAX: ", 0x0F);
+        PrintHex(regs->eax, 0x0F);
+
+        Print("\nEBX: ", 0x0F);
+        PrintHex(regs->ebx, 0x0F);
+
+        Print("\nECX: ", 0x0F);
+        PrintHex(regs->ecx, 0x0F);
+
+        Print("\nEDX: ", 0x0F);
+        PrintHex(regs->edx, 0x0F);
+
+        Print("\nESP: ", 0x0F);
+        PrintHex(regs->esp, 0x0F);
+
+        Print("\nEBP: ", 0x0F);
+        PrintHex(regs->ebp, 0x0F);
+
+        Print("\nESI: ", 0x0F);
+        PrintHex(regs->esi, 0x0F);
+
+        Print("\nEDI: ", 0x0F);
+        PrintHex(regs->edi, 0x0F);
+
         for (;;);
     }
 }
