@@ -1,0 +1,1 @@
+void DeathScreen(const char* error);
