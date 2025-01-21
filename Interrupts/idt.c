@@ -2,6 +2,7 @@
 #include "../Include/ports.h"
 #include "../Font/text.h"
 #include "../Memory/mem.h"
+#include "../Kernel/panic.h"
 
 #include "idt.h"
 
